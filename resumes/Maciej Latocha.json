@@ -1,0 +1,54 @@
+{
+  "name": "Maciej Latocha",
+  "email": "maciej.latocha324@outlook.com",
+  "phone": "",
+  "location": "Warsaw, Poland",
+  "linkedin": "",
+  "website": "",
+
+  "experience": [
+    {
+      "company": "QLOC",
+      "title": "Senior Programmer",
+      "location": "Warsaw, Poland",
+      "start_date": "Mar 2024",
+      "end_date": "Feb 2025"
+    },
+    {
+      "company": "QLOC",
+      "title": "Programmer",
+      "location": "Warsaw, Poland",
+      "start_date": "May 2019",
+      "end_date": "Mar 2024"
+    },
+    {
+      "company": "QLOC",
+      "title": "Junior Programmer",
+      "location": "Warsaw, Poland",
+      "start_date": "March 2017",
+      "end_date": "May 2019"
+    },
+    {
+      "company": "froglogic",
+      "title": "Software Engineer",
+      "location": "Hamburg, Germany",
+      "start_date": "Jul 2015",
+      "end_date": "Oct 2016"
+    }
+  ],
+
+  "education": [
+    {
+      "degree": "Master's degree, computer science",
+      "school": "Szkoła Główna Gospodarstwa Wiejskiego w Warszawie",
+      "start_year": "2014",
+      "end_year": "2015"
+    },
+    {
+      "degree": "Engineer's degree, computer science",
+      "school": "Państwowa Akademia Nauk Stosowanych w Nysie",
+      "start_year": "2009",
+      "end_year": "2013"
+    }
+  ]
+}

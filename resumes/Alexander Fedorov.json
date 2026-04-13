@@ -1,0 +1,48 @@
+{
+  "name": "Alexander Fedorov",
+  "email": "alex.fed3234@outlook.com",
+  "phone": "+48602117835",
+  "location": "Warsaw, Poland",
+  "linkedin": "",
+  "website": "",
+
+  "experience": [
+    {
+      "company": "Keywords Studios",
+      "title": "Senior Game Engineer",
+      "location": "London, UK",
+      "start_date": "May 2024",
+      "end_date": "Present"
+    },
+    {
+      "company": "People Can Fly",
+      "title": "Senior Game Engineer",
+      "location": "Kraków, Poland",
+      "start_date": "Jul 2021",
+      "end_date": "Apr 2024"
+    },
+    {
+      "company": "Frontier Developments",
+      "title": "Game Engineer",
+      "location": "Cambridge, UK",
+      "start_date": "Dec 2017",
+      "end_date": "Jul 2021"
+    },
+    {
+      "company": "Vivid Games",
+      "title": "Gameplay Programmer",
+      "location": "Bydgoszcz, Poland",
+      "start_date": "Apr 2015",
+      "end_date": "Nov 2017"
+    }
+  ],
+
+  "education": [
+    {
+      "degree": "Bachelor of Computer Science",
+      "school": "Warsaw University of Technology",
+      "start_year": "2010",
+      "end_year": "2013"
+    }
+  ]
+}

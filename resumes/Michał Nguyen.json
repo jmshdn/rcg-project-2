@@ -1,0 +1,54 @@
+{
+  "name": "Michał Nguyen",
+  "email": "michal.nguyen32210@outlook.com",
+  "phone": "",
+  "location": "Warsaw, Poland",
+  "linkedin": "",
+  "website": "",
+
+  "experience": [
+    {
+      "company": "Epic Games",
+      "title": "Senior game engineer",
+      "location": "London, UK",
+      "start_date": "Apr 2024",
+      "end_date": "Present"
+    },
+    {
+      "company": "Rockstar North",
+      "title": "Senior game engineer",
+      "location": "Edinburgh, Scotland, UK",
+      "start_date": "Jan 2020",
+      "end_date": "Feb 2024"
+    },
+    {
+      "company": "Ultimate Games",
+      "title": "Game engineer",
+      "location": "Warsaw, Poland",
+      "start_date": "Nov 2017",
+      "end_date": "Jan 2020"
+    },
+    {
+      "company": "Vivid Games",
+      "title": "Gameplay Programmer",
+      "location": "Bydgoszcz, Poland",
+      "start_date": "Apr 2015",
+      "end_date": "Nov 2017"
+    }
+  ],
+
+  "education": [
+    {
+      "degree": "Bachelor of Computer Science",
+      "school": "Warsaw University of Technology",
+      "start_year": "2010",
+      "end_year": "2013"
+    },
+    {
+      "degree": "Master of Computer Science",
+      "school": "Warsaw University of Technology",
+      "start_year": "2013",
+      "end_year": "2015"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "name": "Michał Nguyen Anh",
+  "email": "michal.a.gamedev@outlook.com",
+  "phone": "",
+  "location": "Warsaw, Poland",
+  "linkedin": "",
+  "website": "",
+
+  "experience": [
+    {
+      "company": "Riot Games",
+      "title": "Senior Game Engineer",
+      "location": "Los Angeles, California, United States",
+      "start_date": "May 2024",
+      "end_date": "present"
+    },
+    {
+      "company": "Intercept Games",
+      "title": "Senior Game Engineer",
+      "location": "Seattle, Washington, United States",
+      "start_date": "May 2021",
+      "end_date": "Apr 2024"
+    },
+    {
+      "company": "Sumo Digital",
+      "title": "Gameplay Programmer",
+      "location": "Sheffield, England, UK",
+      "start_date": "Nov 2018",
+      "end_date": "Apr 2021"
+    },
+    {
+      "company": "Vivid Games",
+      "title": "Gameplay Programmer",
+      "location": "Bydgoszcz, Poland",
+      "start_date": "Apr 2015",
+      "end_date": "Nov 2017"
+    }
+  ],
+
+  "education": [
+    {
+      "degree": "Master’s in Interactive Media / Game Development",
+      "school": "Polish-Japanese Academy of Information Technology",
+      "start_year": "2013",
+      "end_year": "2015"
+    },
+    {
+      "degree": "Bachelor Program in Game Development",
+      "school": "FutureGames",
+      "start_year": "2010",
+      "end_year": "2013"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "name": "Aaron Jackson",
+  "email": "aaron.dev818@outlook.com",
+  "phone": "+14698254549",
+  "location": "DeSoto, Texas, United States",
+  "linkedin": "",
+  "website": "",
+
+  "experience": [
+    {
+      "company": "Deck Nine Games",
+      "title": "Senior Game Engineer",
+      "location": "Broomfield, Colorado, United States",
+      "start_date": "Apr 2024",
+      "end_date": "Present"
+    },
+    {
+      "company": "Telltale Games",
+      "title": "Senior Game Engineer",
+      "location": "California, United States",
+      "start_date": "Aug 2020",
+      "end_date": "Mar 2024"
+    },
+    {
+      "company": "Gunfire Games",
+      "title": "Gameplay Programmer",
+      "location": "Austin, Texas, United States",
+      "start_date": "Jun 2018",
+      "end_date": "Aug 2020"
+    },
+    {
+      "company": "Edge of Reality",
+      "title": "Game Engineer",
+      "location": "Austin, Texas, United States",
+      "start_date": "Aug 2016",
+      "end_date": "May 2018"
+    }
+  ],
+
+  "education": [
+    {
+      "degree": "Bachelor of Science",
+      "school": "Texas A&M University-Commerce",
+      "start_year": "2011",
+      "end_year": "2015"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "name": "Adam Lee",
+  "email": "adam.lee412@outlook.com",
+  "phone": "+17373210939",
+  "location": "Austin, Texas, United States",
+  "linkedin": "",
+  "website": "",
+
+  "experience": [
+    {
+      "company": "Blueprint Games",
+      "title": "Senior Game Engineer",
+      "location": "UK",
+      "start_date": "Apr 2024",
+      "end_date": "Mar 2026"
+    },
+    {
+      "company": "IllFonic",
+      "title": "Senior Gameplay Engineer",
+      "location": "Austin, Texas, United States",
+      "start_date": "Jul 2021",
+      "end_date": "Mar 2024"
+    },
+    {
+      "company": "Certain Affinity",
+      "title": "Gameplay Programmer",
+      "location": "Austin, Texas, United States",
+      "start_date": "Aug 2018",
+      "end_date": "Jun 2021"
+    },
+    {
+      "company": "Zindagi Games",
+      "title": "Game Engineer",
+      "location": "California, United States",
+      "start_date": "Aug 2016",
+      "end_date": "Jul 2018"
+    }
+  ],
+
+  "education": [
+    {
+      "degree": "Bachelor of Science in Game Programming",
+      "school": "The Art Institute of Austin, Texas",
+      "start_year": "2012",
+      "end_year": "2016"
+    }
+  ]
+}
