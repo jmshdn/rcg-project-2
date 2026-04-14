@@ -31,8 +31,8 @@ Set these in the Vercel project settings:
 
 ## Vercel deploy notes
 
-- The project is now a FastAPI app with a top-level `main.py` entrypoint.
-- Vercel detects the Python app from `requirements.txt` and `main.py`.
+- The project is now a FastAPI app with a top-level `index.py` entrypoint for Vercel.
+- Vercel detects the Python app from `requirements.txt` and `index.py`.
 - `pyproject.toml` runs `python -m playwright install chromium` during build so PDF generation has a browser available.
 
 ## Security notes
