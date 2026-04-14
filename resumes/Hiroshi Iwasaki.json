@@ -1,0 +1,48 @@
+{
+  "name": "Hiroshi Iwasaki",
+  "email": "hiroshi214.dev@outlook.com",
+  "phone": "+48602117915",
+  "location": "Warsaw, Poland",
+  "linkedin": "",
+  "website": "",
+
+  "experience": [
+    {
+      "company": "Concirrus",
+      "title": "Senior Full-Stack AI Engineer",
+      "location": "London, UK",
+      "start_date": "May 2024",
+      "end_date": "Present"
+    },
+    {
+      "company": "AND Digital",
+      "title": "Senior Full-Stack Engineer",
+      "location": "London, UK",
+      "start_date": "Jul 2021",
+      "end_date": "April 2024"
+    },
+    {
+      "company": "Rakuten",
+      "title": "Full-Stack Engineer",
+      "location": "Tokyo, Japan",
+      "start_date": "Jan 2018",
+      "end_date": "Jun 2021"
+    },
+    {
+      "company": "Fujitsu",
+      "title": "Junior Software Engineer",
+      "location": "Tokyo, Japan",
+      "start_date": "Apr 2016",
+      "end_date": "Dec 2017"
+    }
+  ],
+
+  "education": [
+    {
+      "degree": "Bachelor of Science in Computer Science and Engineering",
+      "school": "University of Aizu",
+      "start_year": "2011",
+      "end_year": "2015"
+    }
+  ]
+}

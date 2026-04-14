@@ -1,0 +1,47 @@
+{
+  "name": "Marcin Iwinski",
+  "email": "marcin.iwinski324@outlook.com",
+  "phone": "",
+  "location": "Warsaw, Poland",
+  "linkedin": "",
+  "website": "",
+
+  "experience": [
+    {
+      "company": "Thoughtworks",
+      "title": "Senior Full-Stack AI Engineer",
+      "location": "Remote (UK)",
+      "start_date": "May 2024",
+      "end_date": "Present"
+    },
+    {
+      "company": "Endava",
+      "title": "Senior Full-Stack Engineer",
+      "location": "Remote (UK)",
+      "start_date": "Jul 2021",
+      "end_date": "Apr 2024"
+    },
+    {
+      "company": "BJSS",
+      "title": "Full-Stack Engineer",
+      "location": "Leeds, UK",
+      "start_date": "Dec 2018",
+      "end_date": "Jun 2021"
+    },
+    {
+      "company": "Future Processing",
+      "title": "Software Engineer",
+      "location": "Wrocław, Poland",
+      "start_date": "Mar 2016",
+      "end_date": "Nov 2018"
+    }
+  ],
+  "education": [
+    {
+      "degree": "Bachelor of Science",
+      "school": "AGH University of Krakow",
+      "start_year": "2011",
+      "end_year": "2015"
+    }
+  ]
+}

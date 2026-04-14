@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block title %}Resume Parser | Resume Tailor{% endblock %}
+
+{% block content %}
+  <main class="page-shell">
+    <section class="panel" style="max-width: 920px;">
+      <div class="top-actions">
+        <a class="ghost-btn subtle-link" href="/" style="text-align: center;">Back to Generator</a>
+        <button id="logout-btn" type="button" class="ghost-btn">Log Out</button>
+      </div>
+
+      <header class="hero">
+        <div class="badge">📄</div>
+        <h1>PDF Resume to JSON Parser</h1>
+        <p>Upload your resume PDF to generate a structured JSON file.</p>
+      </header>
+
+      <div class="result-card">
+        <div class="field" style="margin-bottom: 16px;">
+          <label for="resume-file">Select Resume PDF</label>
+          <input id="resume-file" type="file" accept=".pdf,application/pdf" />
+        </div>
+
+        <div id="selected-file" class="notice success" style="display: none;"></div>
+        <div id="error" class="notice error" style="display: none;"></div>
+
+        <button id="parse-btn" type="button" class="primary-btn" style="width: 100%;">
+          Parse Resume to JSON
+        </button>
+      </div>
+
+      <section id="result-card" class="result-card" style="display: none;">
+        <div class="row" style="margin-bottom: 14px;">
+          <h2 style="margin: 0; font-size: 22px;">Generated JSON</h2>
+          <div class="row" style="justify-content: flex-end;">
+            <button id="copy-btn" type="button" class="ghost-btn">Copy</button>
+            <button id="download-btn" type="button" class="primary-btn">Download JSON</button>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <pre id="json-output" class="preformatted mono"></pre>
+        </div>
+
+        <div class="info-card">
+          <strong>Next Steps</strong>
+          <p class="muted" style="margin: 10px 0 0;">
+            Download the JSON, place it in the <code>resumes/</code> folder, and your profile will be ready for the generator.
+          </p>
+        </div>
+      </section>
+    </section>
+  </main>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    let selectedFile = null;
+    let parsedResult = null;
+
+    const fileInput = document.getElementById("resume-file");
+    const selectedFileBox = document.getElementById("selected-file");
+    const errorBox = document.getElementById("error");
+    const parseBtn = document.getElementById("parse-btn");
+    const resultCard = document.getElementById("result-card");
+    const jsonOutput = document.getElementById("json-output");
+    const copyBtn = document.getElementById("copy-btn");
+    const downloadBtn = document.getElementById("download-btn");
+    const logoutBtn = document.getElementById("logout-btn");
+
+    function showError(message) {
+      errorBox.textContent = message;
+      errorBox.style.display = "block";
+    }
+
+    function clearError() {
+      errorBox.textContent = "";
+      errorBox.style.display = "none";
+    }
+
+    function updateSelectedFile() {
+      if (!selectedFile) {
+        selectedFileBox.style.display = "none";
+        selectedFileBox.textContent = "";
+        return;
+      }
+
+      selectedFileBox.textContent = `Selected: ${selectedFile.name} (${(selectedFile.size / 1024).toFixed(2)} KB)`;
+      selectedFileBox.style.display = "block";
+    }
+
+    function setLoading(loading) {
+      parseBtn.disabled = loading;
+      parseBtn.innerHTML = loading
+        ? '<span class="spinner"></span> Parsing Resume...'
+        : "Parse Resume to JSON";
+    }
+
+    async function ensureAuthorized(response) {
+      if (response.status === 401) {
+        window.location.href = "/login";
+        throw new Error("Unauthorized");
+      }
+      return response;
+    }
+
+    fileInput.addEventListener("change", () => {
+      const file = fileInput.files && fileInput.files[0];
+      clearError();
+      parsedResult = null;
+      resultCard.style.display = "none";
+
+      if (!file) {
+        selectedFile = null;
+        updateSelectedFile();
+        return;
+      }
+
+      const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
+      if (!isPdf) {
+        selectedFile = null;
+        fileInput.value = "";
+        updateSelectedFile();
+        showError("Please select a valid PDF file.");
+        return;
+      }
+
+      selectedFile = file;
+      updateSelectedFile();
+    });
+
+    parseBtn.addEventListener("click", async () => {
+      clearError();
+      if (!selectedFile) {
+        showError("Please select a PDF file first.");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("resume", selectedFile);
+
+      setLoading(true);
+      try {
+        const response = await ensureAuthorized(
+          await fetch("/api/parse-resume", {
+            method: "POST",
+            body: formData,
+          })
+        );
+
+        const payload = await response.json();
+        if (!response.ok) {
+          throw new Error(payload.error || "Failed to parse resume.");
+        }
+
+        parsedResult = payload.data;
+        jsonOutput.textContent = JSON.stringify(parsedResult, null, 2);
+        resultCard.style.display = "block";
+      } catch (error) {
+        if (error.message !== "Unauthorized") {
+          showError(error.message || "Failed to parse resume.");
+        }
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    copyBtn.addEventListener("click", async () => {
+      if (!parsedResult) return;
+      await navigator.clipboard.writeText(JSON.stringify(parsedResult, null, 2));
+      alert("JSON copied to clipboard!");
+    });
+
+    downloadBtn.addEventListener("click", () => {
+      if (!parsedResult) return;
+
+      const blob = new Blob([JSON.stringify(parsedResult, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = `${(parsedResult.name || "resume").replace(/\s+/g, "_")}.json`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      try {
+        await fetch("/api/auth/logout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+        });
+      } finally {
+        window.location.href = "/login";
+      }
+    });
+  </script>
+{% endblock %}

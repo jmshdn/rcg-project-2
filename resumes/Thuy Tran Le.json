@@ -1,0 +1,48 @@
+{
+  "name": "Thuy Tran Le",
+  "email": "thuytran.le914@outlook.com",
+  "phone": "+48602417834",
+  "location": "Warsaw, Poland",
+  "linkedin": "",
+  "website": "",
+
+  "experience": [
+    {
+      "company": "Cognizant",
+      "title": "Senior Full-Stack AI Engineer",
+      "location": "Remote (Europe)",
+      "start_date": "May 2024",
+      "end_date": "Present"
+    },
+    {
+      "company": "EPAM Systems",
+      "title": "Senior Full-Stack Engineer",
+      "location": "Remote (Poland)",
+      "start_date": "Jul 2021",
+      "end_date": "Apr 2024"
+    },
+    {
+      "company": "Netguru",
+      "title": "Full-Stack Software Engineer",
+      "location": "Poznań, Poland",
+      "start_date": "Feb 2018",
+      "end_date": "Jun 2021"
+    },
+    {
+      "company": "FPT Software",
+      "title": "Software Engineer Intern",
+      "location": "Ho Chi Minh City, Vietnam",
+      "start_date": "Apr 2017",
+      "end_date": "Jan 2018"
+    }
+  ],
+
+  "education": [
+    {
+      "degree": "Bachelor of Science in Computer Science",
+      "school": "Ho Chi Minh City University of Technology",
+      "start_year": "2012",
+      "end_year": "2016"
+    }
+  ]
+}

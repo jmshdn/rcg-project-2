@@ -1,0 +1,54 @@
+{
+  "name": "Marcin Deja",
+  "email": "marcin.deja013@outlook.com",
+  "phone": "",
+  "location": "Warsaw, Poland",
+  "linkedin": "",
+  "website": "",
+
+  "experience": [
+    {
+      "company": "CrowdSecure",
+      "title": "Senior Security Engineer",
+      "location": "London, UK",
+      "start_date": "Apr 2024",
+      "end_date": "Present"
+    },
+    {
+      "company": "Capgemini",
+      "title": "Senior Network & Linux Security Engineer",
+      "location": "London, UK",
+      "start_date": "Mar 2022",
+      "end_date": "Apr 2024"
+    },
+    {
+      "company": "Atos",
+      "title": "Cyber Security Analyst",
+      "location": "London, UK",
+      "start_date": "Jan 2020",
+      "end_date": "Feb 2022"
+    },
+    {
+      "company": "Comarch",
+      "title": "System Network Security Engineer",
+      "location": "Kraków, Poland",
+      "start_date": "Aug 2018",
+      "end_date": "Dec 2019"
+    }
+  ],
+
+  "education": [
+    {
+      "degree": "Bachelor's in Computer Science",
+      "school": "Brighton Institute of Technology",
+      "start_year": "2011",
+      "end_year": "2015"
+    },
+    {
+      "degree": "Master's in Cybersecurity",
+      "school": "Westshire University",
+      "start_year": "2015",
+      "end_year": "2017"
+    }
+  ]
+}

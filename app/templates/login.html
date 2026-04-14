@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Private Access | Resume Tailor{% endblock %}
+
+{% block content %}
+  <main class="page-shell">
+    <section class="panel" style="max-width: 420px;">
+      <div class="hero" style="text-align: left; margin-bottom: 24px;">
+        <div class="badge" style="margin-left: 0;">R</div>
+        <h1>Private Access</h1>
+        <p style="margin-left: 0;">
+          This deployment is password protected so your OpenAI-backed resume tools cannot be used by strangers.
+        </p>
+      </div>
+
+      <form id="login-form">
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" autofocus />
+        </div>
+
+        <div id="error" class="notice error" style="display: none;"></div>
+
+        <button id="submit-btn" type="submit" class="primary-btn" style="width: 100%;">
+          Enter Site
+        </button>
+      </form>
+    </section>
+  </main>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    const form = document.getElementById("login-form");
+    const errorBox = document.getElementById("error");
+    const submitBtn = document.getElementById("submit-btn");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      errorBox.style.display = "none";
+      errorBox.textContent = "";
+
+      const password = document.getElementById("password").value;
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Checking...";
+
+      try {
+        const response = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password }),
+        });
+
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(payload.error || "Login failed.");
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const nextPath = params.get("next");
+        window.location.replace(nextPath && nextPath.startsWith("/") ? nextPath : "/");
+      } catch (error) {
+        errorBox.textContent = error.message || "Login failed.";
+        errorBox.style.display = "block";
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Enter Site";
+      }
+    });
+  </script>
+{% endblock %}

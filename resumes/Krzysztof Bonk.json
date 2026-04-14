@@ -1,0 +1,48 @@
+{
+  "name": "Krzysztof Bonk",
+  "email": "krys.bonk324@outlook.com",
+  "phone": "",
+  "location": "Warsaw, Poland",
+  "linkedin": "",
+  "website": "",
+
+  "experience": [
+    {
+      "company": "Faculty AI",
+      "title": "Senior Full-Stack AI Engineer",
+      "location": "London, UK",
+      "start_date": "Apr 2024",
+      "end_date": "Present"
+    },
+    {
+      "company": "Luxoft",
+      "title": "Senior Full-Stack Engineer",
+      "location": "",
+      "start_date": "Feb 2021",
+      "end_date": "Apr 2024"
+    },
+    {
+      "company": "Future Processing",
+      "title": "Full-Stack Software Engineer",
+      "location": "Wrocław, Poland (international clients, English-speaking)",
+      "start_date": "Jan 2019",
+      "end_date": "Jan 2021"
+    },
+    {
+      "company": "Sii Poland",
+      "title": "Software Engineer",
+      "location": "Poznań, Poland (international project teams)",
+      "start_date": "Nov 2017",
+      "end_date": "Jan 2019"
+    }
+  ],
+
+  "education": [
+    {
+      "degree": "Bachelor of Computer Science",
+      "school": "Polish-Japanese Academy of Information Technology",
+      "start_year": "2013",
+      "end_year": "2017"
+    }
+  ]
+}

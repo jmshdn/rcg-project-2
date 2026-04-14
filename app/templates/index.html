@@ -1,0 +1,263 @@
+{% extends "base.html" %}
+
+{% block title %}Resume Tailor{% endblock %}
+
+{% block content %}
+  <main class="page-shell">
+    <section class="panel">
+      <div class="top-actions">
+        <a class="ghost-btn subtle-link" href="/parse" style="text-align: center;">Resume Parser</a>
+        <button id="logout-btn" type="button" class="ghost-btn">Log Out</button>
+      </div>
+
+      <header class="hero">
+        <div class="badge">⚡</div>
+        <h1>Resume Tailor</h1>
+        <p>AI-powered resume optimization. Select profile, choose template, paste JD.</p>
+      </header>
+
+      <div id="error" class="notice error" style="display: none;"></div>
+      <div id="success" class="notice success" style="display: none;"></div>
+
+      <form id="generator-form">
+        <div class="form-grid">
+          <div class="field">
+            <label for="profile">Profile</label>
+            <select id="profile" name="profile">
+              <option value="">Select profile...</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="template">Template</label>
+            <select id="template" name="template"></select>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="job-title">Job Title</label>
+            <input id="job-title" name="jobTitle" type="text" placeholder="e.g., Software Engineer" />
+          </div>
+
+          <div class="field">
+            <label for="company-name">Company Name</label>
+            <input id="company-name" name="companyName" type="text" placeholder="e.g., Google" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="job-description">Job Description</label>
+          <textarea
+            id="job-description"
+            name="jd"
+            placeholder="Paste the full job description here..."
+          ></textarea>
+        </div>
+
+        <button id="generate-btn" type="submit" class="primary-btn" style="width: 100%;">
+          Generate Tailored Resume
+        </button>
+      </form>
+
+      <section class="info-card">
+        <div class="stats">
+          <div class="stat">
+            <div style="font-size: 24px;">🎯</div>
+            <strong>ATS Optimized</strong>
+            <span>95-100% Score</span>
+          </div>
+          <div class="stat">
+            <div style="font-size: 24px;">⚡</div>
+            <strong>AI Powered</strong>
+            <span>GPT-5-mini</span>
+          </div>
+          <div class="stat">
+            <div style="font-size: 24px;">📄</div>
+            <strong>Multiple Templates</strong>
+            <span>Professional Styles</span>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    const state = {
+      profiles: [],
+      templates: [],
+      loading: false,
+    };
+
+    const profileSelect = document.getElementById("profile");
+    const templateSelect = document.getElementById("template");
+    const form = document.getElementById("generator-form");
+    const generateBtn = document.getElementById("generate-btn");
+    const logoutBtn = document.getElementById("logout-btn");
+    const errorBox = document.getElementById("error");
+    const successBox = document.getElementById("success");
+
+    function showError(message) {
+      successBox.style.display = "none";
+      successBox.textContent = "";
+      errorBox.textContent = message;
+      errorBox.style.display = "block";
+    }
+
+    function showSuccess(message) {
+      errorBox.style.display = "none";
+      errorBox.textContent = "";
+      successBox.textContent = message;
+      successBox.style.display = "block";
+    }
+
+    function clearNotices() {
+      errorBox.style.display = "none";
+      errorBox.textContent = "";
+      successBox.style.display = "none";
+      successBox.textContent = "";
+    }
+
+    function sanitize(value) {
+      return value ? value.replace(/\s+/g, "").replace(/[^A-Za-z0-9]/g, "") : "";
+    }
+
+    function getFilenameFromHeader(response) {
+      const contentDisposition = response.headers.get("Content-Disposition") || "";
+      const match = contentDisposition.match(/filename="?([^"]+)"?/i);
+      return match ? match[1] : "";
+    }
+
+    function buildFallbackFilename() {
+      const selectedProfileId = profileSelect.value;
+      const profile = state.profiles.find((item) => item.id === selectedProfileId);
+      const profileName = sanitize(profile ? profile.name : "Profile");
+      const companyName = sanitize(document.getElementById("company-name").value);
+      const jobTitle = sanitize(document.getElementById("job-title").value);
+
+      let baseName = profileName || "Profile";
+      if (companyName) baseName += `_${companyName}`;
+      if (jobTitle) baseName += `_${jobTitle}`;
+      return `${baseName}.pdf`;
+    }
+
+    function setLoading(loading) {
+      state.loading = loading;
+      generateBtn.disabled = loading;
+      generateBtn.innerHTML = loading
+        ? '<span class="spinner"></span> Generating Resume...'
+        : "Generate Tailored Resume";
+    }
+
+    async function ensureAuthorized(response) {
+      if (response.status === 401) {
+        window.location.href = "/login";
+        throw new Error("Unauthorized");
+      }
+      return response;
+    }
+
+    async function loadProfiles() {
+      const response = await ensureAuthorized(await fetch("/api/profiles"));
+      state.profiles = await response.json();
+      profileSelect.innerHTML = '<option value="">Select profile...</option>';
+      state.profiles.forEach((profile) => {
+        const option = document.createElement("option");
+        option.value = profile.id;
+        option.textContent = profile.name;
+        profileSelect.appendChild(option);
+      });
+    }
+
+    async function loadTemplates() {
+      const response = await ensureAuthorized(await fetch("/api/templates"));
+      state.templates = await response.json();
+      templateSelect.innerHTML = "";
+      state.templates.forEach((template) => {
+        const option = document.createElement("option");
+        option.value = template.id;
+        option.textContent = template.name;
+        if (template.id === "Resume") {
+          option.selected = true;
+        }
+        templateSelect.appendChild(option);
+      });
+    }
+
+    async function downloadResume(payload) {
+      const response = await ensureAuthorized(
+        await fetch("/api/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        })
+      );
+
+      if (!response.ok) {
+        throw new Error((await response.text()) || "Failed to generate PDF");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = getFilenameFromHeader(response) || buildFallbackFilename();
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      window.URL.revokeObjectURL(url);
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (state.loading) return;
+
+      clearNotices();
+
+      const payload = {
+        profile: profileSelect.value,
+        template: templateSelect.value || "Resume",
+        jobTitle: document.getElementById("job-title").value.trim(),
+        companyName: document.getElementById("company-name").value.trim(),
+        jd: document.getElementById("job-description").value.trim(),
+      };
+
+      if (!payload.profile) return showError("Please select a profile.");
+      if (!payload.jd) return showError("Please enter the Job Description.");
+      if (!payload.jobTitle) return showError("Please enter the Job Title.");
+      if (!payload.companyName) return showError("Please enter the Company Name.");
+
+      setLoading(true);
+      try {
+        await downloadResume(payload);
+        showSuccess("Resume generated successfully.");
+      } catch (error) {
+        if (error.message !== "Unauthorized") {
+          showError(error.message || "Failed to generate PDF.");
+        }
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      try {
+        await fetch("/api/auth/logout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+        });
+      } finally {
+        window.location.href = "/login";
+      }
+    });
+
+    Promise.all([loadProfiles(), loadTemplates()]).catch((error) => {
+      if (error.message !== "Unauthorized") {
+        showError("Failed to load profiles or templates.");
+        console.error(error);
+      }
+    });
+  </script>
+{% endblock %}

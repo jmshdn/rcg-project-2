@@ -1,0 +1,7 @@
+[project]
+name = "resume-tailor"
+version = "1.0.0"
+requires-python = ">=3.12"
+
+[tool.vercel.scripts]
+build = "python -m playwright install chromium"
