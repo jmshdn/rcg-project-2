@@ -6,6 +6,17 @@ export default function ParseResume() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
 
+  const logout = async () => {
+    try {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+    } finally {
+      window.location.href = "/login";
+    }
+  };
+
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile && selectedFile.type === "application/pdf") {
@@ -39,6 +50,11 @@ export default function ParseResume() {
       const data = await response.json();
 
       if (!response.ok) {
+        if (response.status === 401) {
+          window.location.href = "/login";
+          return;
+        }
+
         throw new Error(data.error || "Failed to parse resume");
       }
 
@@ -81,6 +97,23 @@ export default function ParseResume() {
       borderRadius: "12px",
       boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
     }}>
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "10px" }}>
+        <button
+          onClick={logout}
+          style={{
+            background: "#0f172a",
+            color: "#e2e8f0",
+            border: "none",
+            borderRadius: "999px",
+            padding: "8px 14px",
+            cursor: "pointer",
+            fontSize: "12px",
+            fontWeight: "600"
+          }}
+        >
+          Log Out
+        </button>
+      </div>
       <h1 style={{ textAlign: "center", color: "#333", marginBottom: "10px" }}>
         PDF Resume to JSON Parser
       </h1>

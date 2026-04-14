@@ -5,12 +5,50 @@ import OpenAI from "openai";
 import fs from "fs";
 import path from "path";
 import Handlebars from "handlebars";
+import { applyApiSecurityHeaders, enforceRateLimit, requireSameOrigin } from "../../lib/security";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "48kb",
+    },
+  },
+};
+
+function getTrimmedField(value) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function getProfilePath(profileId) {
+  const resumesDir = path.join(process.cwd(), "resumes");
+  const matchingFile = fs
+    .readdirSync(resumesDir)
+    .find((file) => file === `${profileId}.json` && file !== "_template.json");
+
+  return matchingFile ? path.join(resumesDir, matchingFile) : null;
+}
+
+function getTemplatePath(templateId) {
+  const templatesDir = path.join(process.cwd(), "templates");
+  const matchingFile = fs.readdirSync(templatesDir).find((file) => file === `${templateId}.html`);
+
+  return matchingFile ? path.join(templatesDir, matchingFile) : null;
+}
+
+function getOpenAIClient() {
+  const apiKey = process.env.OPENAI_API_KEY?.trim();
+
+  if (!apiKey) {
+    throw new Error("Missing OPENAI_API_KEY. Copy .env.example to .env.local and add your OpenAI API key.");
+  }
+
+  return new OpenAI({ apiKey });
+}
 
 // Call GPT with timeout & retries
 async function callGPT(promptOrMessages, model = null, maxTokens = 8000, retries = 2, timeoutMs = 180000) {
   const resolvedModel = model || process.env.OPENAI_MODEL || "gpt-5-mini";
+  const openai = getOpenAIClient();
   while (retries > 0) {
     try {
       let messages;
@@ -45,25 +83,44 @@ async function callGPT(promptOrMessages, model = null, maxTokens = 8000, retries
 }
 
 export default async function handler(req, res) {
+  applyApiSecurityHeaders(res);
+
   if (req.method !== "POST") return res.status(405).send("Method not allowed");
 
   try {
-    const { profile, jd, template, jobTitle, companyName } = req.body;
+    if (!requireSameOrigin(req, res)) {
+      return;
+    }
+
+    if (!enforceRateLimit(req, res, { bucket: "resume-generate", limit: 6, windowMs: 15 * 60 * 1000 })) {
+      return;
+    }
+
+    if (!process.env.OPENAI_API_KEY?.trim()) {
+      return res.status(500).send("Missing OPENAI_API_KEY. Copy .env.example to .env.local and add your OpenAI API key.");
+    }
+
+    const profile = getTrimmedField(req.body?.profile);
+    const jd = getTrimmedField(req.body?.jd);
+    const template = getTrimmedField(req.body?.template) || "Resume";
+    const jobTitle = getTrimmedField(req.body?.jobTitle);
+    const companyName = getTrimmedField(req.body?.companyName);
 
     if (!profile) return res.status(400).send("Profile required");
     if (!jd) return res.status(400).send("Job description required");
-    
-    // Default to Resume.html if no template specified
-    const templateName = template || "Resume";
+    if (jd.length > 12000) return res.status(400).send("Job description is too long");
+    if (jobTitle.length > 120) return res.status(400).send("Job title is too long");
+    if (companyName.length > 120) return res.status(400).send("Company name is too long");
+    if (template.length > 120) return res.status(400).send("Template name is invalid");
 
     // Load profile JSON
     console.log(`Loading profile: ${profile}`);
-    const profilePath = path.join(process.cwd(), "resumes", `${profile}.json`);
-    
-    if (!fs.existsSync(profilePath)) {
+    const profilePath = getProfilePath(profile);
+
+    if (!profilePath) {
       return res.status(404).send(`Profile "${profile}" not found`);
     }
-    
+
     const profileData = JSON.parse(fs.readFileSync(profilePath, "utf-8"));
 
 
@@ -353,14 +410,14 @@ OUTPUT: Return the improved resume as a single JSON object only (no other text, 
     });
 
     // Load Handlebars template (dynamic based on user selection)
-    const templateFile = `${templateName}.html`;
-    const templatePath = path.join(process.cwd(), "templates", templateFile);
-    
-    if (!fs.existsSync(templatePath)) {
+    const templateFile = `${template}.html`;
+    const templatePath = getTemplatePath(template);
+
+    if (!templatePath) {
       console.error(`Template not found: ${templateFile}`);
-      return res.status(404).send(`Template "${templateName}" not found`);
+      return res.status(404).send(`Template "${template}" not found`);
     }
-    
+
     console.log(`Using template: ${templateFile}`);
     const templateSource = fs.readFileSync(templatePath, "utf-8");
     

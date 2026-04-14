@@ -1,3 +1,6 @@
 node_modules
-.env
 .next
+.env*
+!.env.example
+.dev-pid
+.start-pid

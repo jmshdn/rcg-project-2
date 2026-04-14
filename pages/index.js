@@ -10,15 +10,40 @@ export default function Home() {
   const [companyName, setCompanyName] = useState("");
   const [disable, setDisable] = useState(false);
 
+  const logout = async () => {
+    try {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+    } finally {
+      window.location.href = "/login";
+    }
+  };
+
   // Load profiles and templates on mount
   useEffect(() => {
     fetch("/api/profiles")
-      .then(res => res.json())
+      .then(async (res) => {
+        if (res.status === 401) {
+          window.location.href = "/login";
+          return [];
+        }
+
+        return res.json();
+      })
       .then(data => setProfiles(data))
       .catch(err => console.error("Failed to load profiles:", err));
     
     fetch("/api/templates")
-      .then(res => res.json())
+      .then(async (res) => {
+        if (res.status === 401) {
+          window.location.href = "/login";
+          return [];
+        }
+
+        return res.json();
+      })
       .then(data => setTemplates(data))
       .catch(err => console.error("Failed to load templates:", err));
   }, []);
@@ -49,6 +74,11 @@ export default function Home() {
       if (!genRes.ok) {
         const errorText = await genRes.text();
         console.error('Error response:', errorText);
+
+        if (genRes.status === 401) {
+          window.location.href = "/login";
+          return;
+        }
         
         throw new Error(errorText || "Failed to generate PDF");
       }
@@ -185,7 +215,26 @@ export default function Home() {
           }}>
             
             {/* Header */}
-            <div style={{ textAlign: "center", marginBottom: "40px" }}>
+            <div style={{ textAlign: "center", marginBottom: "40px", position: "relative" }}>
+              <button
+                onClick={logout}
+                style={{
+                  position: "absolute",
+                  top: "0",
+                  right: "0",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  background: "rgba(15, 23, 42, 0.65)",
+                  color: "#cbd5e1",
+                  borderRadius: "999px",
+                  padding: "8px 14px",
+                  cursor: "pointer",
+                  fontSize: "12px",
+                  fontWeight: "600",
+                  letterSpacing: "0.4px"
+                }}
+              >
+                Log Out
+              </button>
               <div style={{
                 display: "inline-flex",
                 alignItems: "center",

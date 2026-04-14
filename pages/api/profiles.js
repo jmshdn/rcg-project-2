@@ -1,7 +1,14 @@
 import fs from "fs";
 import path from "path";
+import { applyApiSecurityHeaders } from "../../lib/security";
 
 export default function handler(req, res) {
+  applyApiSecurityHeaders(res);
+
+  if (req.method !== "GET") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
   try {
     const resumesDir = path.join(process.cwd(), "resumes");
     const files = fs.readdirSync(resumesDir);

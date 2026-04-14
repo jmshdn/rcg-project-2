@@ -1,7 +1,10 @@
 import fs from "fs";
 import path from "path";
+import { applyApiSecurityHeaders } from "../../lib/security";
 
 export default function handler(req, res) {
+  applyApiSecurityHeaders(res);
+
   if (req.method !== "GET") {
     return res.status(405).send("Method not allowed");
   }
