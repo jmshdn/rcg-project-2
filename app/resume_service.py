@@ -20,6 +20,7 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 RESUMES_DIR = BASE_DIR / "resumes"
 RESUME_TEMPLATES_DIR = BASE_DIR / "templates"
 PROMPTS_DIR = BASE_DIR / "app" / "prompts"
+PLAYWRIGHT_BROWSERS_DIR = BASE_DIR / ".playwright-browsers"
 
 
 def get_openai_client() -> AsyncOpenAI:
@@ -355,6 +356,8 @@ async def render_pdf_from_html(html: str) -> bytes:
                 "Start the app without --reload: .\\.venv\\Scripts\\python -m uvicorn main:app"
             )
 
+    if "PLAYWRIGHT_BROWSERS_PATH" not in os.environ and PLAYWRIGHT_BROWSERS_DIR.exists():
+        os.environ["PLAYWRIGHT_BROWSERS_PATH"] = str(PLAYWRIGHT_BROWSERS_DIR)
     launch_args = ["--no-sandbox"] if os.getenv("VERCEL") == "1" or os.getenv("PYTHON_ENV") == "production" else []
     async with async_playwright() as playwright:
         browser = await playwright.chromium.launch(headless=True, args=launch_args)

@@ -33,7 +33,7 @@ Set these in the Vercel project settings:
 
 - The project is now a FastAPI app with a top-level `index.py` entrypoint for Vercel.
 - Vercel detects the Python app from `requirements.txt` and `index.py`.
-- `pyproject.toml` runs `python -m playwright install chromium` during build so PDF generation has a browser available.
+- `pyproject.toml` installs the Playwright Chromium headless shell into `.playwright-browsers/` during build so PDF generation has a browser available without downloading the full desktop Chromium bundle.
 
 ## Security notes
 
